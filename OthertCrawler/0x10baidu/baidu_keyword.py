@@ -9,14 +9,14 @@ import queue
 import threading
 import os
 import sys
-
+from faker import Faker
 
 class BaiduKeyword(object):
     def __init__(self, thread=20, filename=None, number=1000):
+        faker = Faker()
         self.baseUrl = 'http://www.baidu.com/s'
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
-                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+            'User-Agent': faker.user_agent()
         }
         self.csv_header = ['keyword', 'number', 'time']
         self.keyword_queue = queue.Queue()
@@ -65,7 +65,7 @@ class BaiduKeyword(object):
 
     def run(self, path):
         self.path = path
-        with open(path, 'r', encoding='gb18030') as f:
+        with open(path, 'r', encoding='utf-8') as f:
             a = f.readlines()
             for i in a:
                 self.keyword_queue.put(i.strip())
